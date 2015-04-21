@@ -27,7 +27,11 @@ app.use(stylus.middleware({
 app.use(express.static(__dirname + '/public'));
 
 //connect with mongoDB
-mongoose.connect('mongodb://localhost/multivision');
+if(env === 'development'){
+	mongoose.connect('mongodb://localhost/multivision');
+}else{
+	mongoose.connect('mongodb://lugearma:geroplas@ds037447.mongolab.com:37447/multivision');
+}
 db.on('error', console.error.bind(console, 'connection error...') );
 db.once('open', function callback() {
 	console.log('multivision db opened');
@@ -41,7 +45,6 @@ var Message = mongoose.model('message', messageSchema);
 var mongoMessage;
 
 Message.findOne().exec(function (err, messageDoc){
-	console.log(messageDoc);
 	mongoMessage = messageDoc.message;
 });
 
