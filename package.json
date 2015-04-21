@@ -1,17 +1,22 @@
 {
-  "name": "Multivision",
-  "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "lugearma",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.12.3",
-    "express": "^4.12.3",
-    "jade": "^1.9.2",
-    "morgan": "^1.5.2"
-  }
+    "name": "Multivision",
+    "version": "0.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "engines":{
+        "node": "0.10.x",
+        "npm": "1.4.x"
+    },
+    "author": "lugearma",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.12.3",
+        "express": "^4.12.3",
+        "jade": "^1.9.2",
+        "mongoose": "^4.0.1",
+        "morgan": "^1.5.2"
+    }
 }
