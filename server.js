@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 
 var port = process.env.NODE_ENV || 3030;
 // var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-var env = 'production';
+var env = 'development';
 var db = mongoose.connection;
 
 var app = express();
