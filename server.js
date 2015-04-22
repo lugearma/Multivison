@@ -4,7 +4,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-var port = process.env.NODE_ENV || 3030;
+var port = process.env.PORT || 5000;
 // var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var env = 'production';
 var db = mongoose.connection;
@@ -46,6 +46,7 @@ var Message = mongoose.model('message', messageSchema);
 var mongoMessage;
 
 Message.findOne().exec(function (err, messageDoc){
+	console.log(messageDoc.message);
 	mongoMessage = messageDoc.message;
 });
 
