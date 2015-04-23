@@ -11,7 +11,7 @@ var db = mongoose.connection;
 
 var app = express();
 
-function compile(){
+function compile(str, path){
 	return stylus(str).set('filename', path);
 };
 //Server configure
@@ -38,26 +38,12 @@ db.once('open', function callback() {
 	console.log('multivision db opened');
 });
 
-//Create schema
-var messageSchema = mongoose.Schema({
-	message: String	
-});
-var Message = mongoose.model('message', messageSchema);
-var mongoMessage;
-
-Message.findOne().exec(function (err, messageDoc){
-	console.log(messageDoc.message);
-	mongoMessage = messageDoc.message;
-});
-
 app.get('/partials/:partialPath', function (req, res){
 	res.render('partials/' + req.params.partialPath);
 });
 
 app.get('*', function (req, res){
-	res.render('index', { 
-		mongoMessage: mongoMessage 
-	});
+	res.render('index');
 });
 
 app.listen(port);
