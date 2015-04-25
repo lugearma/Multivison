@@ -1,5 +1,5 @@
 var express = require('express');
-var stylus = require('stylus');
+//var stylus = require('stylus');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -11,20 +11,20 @@ var db = mongoose.connection;
 
 var app = express();
 
-function compile(str, path){
+/*function compile(str, path){
 	return stylus(str).set('filename', path);
-};
+}*/
 //Server configure
 app.set('views', __dirname + '/server/views');
 app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
-app.use(stylus.middleware({
+/*app.use(stylus.middleware({
 		src: __dirname + '/public', 
 		compile: compile
 	})
-);
+);*/
 app.use(express.static(__dirname + '/public'));
 
 //connect with mongoDB
@@ -38,8 +38,8 @@ db.once('open', function callback() {
 	console.log('multivision db opened');
 });
 
-app.get('/partials/:partialPath', function (req, res){
-	res.render('partials/' + req.params.partialPath);
+app.get('/partials/*', function (req, res){
+	res.render('../../public/app/' + req.params[0]);
 });
 
 app.get('*', function (req, res){
