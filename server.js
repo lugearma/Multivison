@@ -1,50 +1,52 @@
 var express = require('express');
-//var stylus = require('stylus');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-
-var port = process.env.PORT || 3030;
-var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-console.log(env);
-var db = mongoose.connection;
-
 var app = express();
 
-/*function compile(str, path){
-	return stylus(str).set('filename', path);
-}*/
-//Server configure
-app.set('views', __dirname + '/server/views');
-app.set('view engine', 'jade');
-app.use(logger('dev'));
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json());
-/*app.use(stylus.middleware({
-		src: __dirname + '/public', 
-		compile: compile
-	})
-);*/
-app.use(express.static(__dirname + '/public'));
+var mongoose = require('mongoose');
+
+var passport = require('passport'),
+    passportLocal = require('passport-local'),
+    LocalStrategy = passportLocal.Strategy;
+
+
+var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+console.log(env);
+
+var config = require('./server/config/config')[env];
+
+//Express middlewares and some configurations
+require('./server/config/express.js')(app, config);
 
 //connect with mongoDB
-if(env === 'development'){
-	mongoose.connect('mongodb://localhost/multivision');
-}else{
-	mongoose.connect('mongodb://lugearma:geroplas@ds037447.mongolab.com:37447/multivision');
-}
-db.on('error', console.error.bind(console, 'connection error...') );
-db.once('open', function callback() {
-	console.log('multivision db opened');
+require('./server/config/mongoose')(config);
+
+var User = mongoose.model('User');
+passport.use(new LocalStrategy(
+   function(username, password, done){
+        User.findOne({ userName : username }).exec(function(err, user){
+            if(user)
+                return done(null, user);
+            return done(null, false);
+        });
+   }
+));
+
+passport.serializeUser(function(user, done){
+    if (user)
+        done(null, user._id);
 });
 
-app.get('/partials/*', function (req, res){
-	res.render('../../public/app/' + req.params[0]);
+passport.deserializeUser(function(){
+    User.findOne({_id:_id}).exec(function(err, user){
+        if(user)
+            return done(null, user);
+        return done(null, false);
+    });
 });
 
-app.get('*', function (req, res){
-	res.render('index');
-});
 
-app.listen(port);
-console.log("Listen port " + port + "...");
+require('./server/config/routes')(app);
+
+console.log(config);
+
+app.listen(config.port);
+console.log("Listen port " + config.port + "...");
