@@ -13,7 +13,7 @@ require('./server/config/express.js')(app, config);
 //connect with mongoDB
 require('./server/config/mongoose')(config);
 
-//Passport configurate
+//Passport configure
 require('./server/config/passport')();
 
 require('./server/config/routes')(app);
