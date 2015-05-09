@@ -28,6 +28,13 @@ angular.module('app').factory('mvAuth', function ($http, mvIdentity, $q, mvUser)
                 dfd.resolve; 
             });
             return dfd.promise;
+        },
+
+        //If the current user is admin or not
+        authorizeCurrentUserForRoute: function (role) {
+            if(mvIdentity.isAuthorized(role))
+                return true;
+            return $q.reject('not authorized');
         }
 	};
 });
